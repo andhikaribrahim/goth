@@ -1,0 +1,98 @@
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# env file
+.env
+
+# Output of the go command
+bin/
+pkg/
+*.so
+*.a
+
+# Output of go tooling
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.tmproj
+*.esproj
+*.esproj.bak
+*.c9project
+*.c9revisions
+*.code-workspace
+*.vagrant
+*.vagrantup
+*.vagrantmachines
+*.terraform
+*.terraform.d
+*.terraformrc
+*.terraformrc.example
+*.tfstate
+*.tfstate.backup
+*.tfstate.backup*
+
+# Output of the go command when using modules
+# .module-cache/
+# .module-cache-test/
+# .module-cache-failures/
+
+# Output of code coverage tools
+*.coverprofile
+
+
+# Output of the go command when using vgo
+# vgo.exe
+# vgo
+# vgo.sum
+# vgo.mod
+
+# Output of the go command when using dep
+# Gopkg.lock
+# Gopkg.toml
+# vendor/
+# _vendor/
+# .vendor-new/
+
+# go-swagger
+swagger.json
+swagger.yaml
+swagger.yml
+swagger-spec.json
+swagger-spec.yaml
+swagger-spec.yml
+swagger-codegen-cli.jar
+
+# using air
+tmp/
+**/tmp/
+**/tmp/**/*
+!tmp/.gitkeep
+!**/tmp/.gitkeep
+
+# using air
+bin/
+**/bin/
+**/bin/**/*
+!bin/.gitkeep
+!**/bin/.gitkeep
