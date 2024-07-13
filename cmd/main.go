@@ -3,45 +3,86 @@ package main
 import (
 	"html/template"
 	"io"
+	"log"
+	"os"
+	"path/filepath"
+
+	"goth/cmd/web"
+	"goth/internals/controllers"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 type Template struct {
-	tmpl *template.Template
+    tmpl *template.Template
+}
+
+func ParseTemplates() (*template.Template, error) {
+    templateBuilder := template.New("")
+    if t, _ := templateBuilder.ParseGlob("views/*/*/*/*/*.html"); t != nil {
+        templateBuilder = t
+    }
+    if t, _ := templateBuilder.ParseGlob("views/*/*/*/*.html"); t != nil {
+        templateBuilder = t
+    }
+    if t, _ := templateBuilder.ParseGlob("views/*/*/*.html"); t != nil {
+        templateBuilder = t
+    }
+    if t, _ := templateBuilder.ParseGlob("views/*/*.html"); t != nil {
+        templateBuilder = t
+    }
+    return templateBuilder.ParseGlob("views/*.html")
 }
 
 func newTemplate() *Template {
-	return &Template{
-		tmpl: template.Must(template.ParseGlob("views/*.html")),
-	}
+    tmpl, err := ParseTemplates()
+
+    if err != nil {
+        log.Fatalf("Error loading templates: %v", err)
+    }
+
+    log.Printf("Parsed templates: %+v", tmpl.DefinedTemplates())
+
+    return &Template{
+        tmpl: tmpl,
+    }
 }
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	return t.tmpl.ExecuteTemplate(w, name, data)
-}
-
-type Count struct {
-	Count int
+    log.Printf("Rendering template: %s", name)
+    return t.tmpl.ExecuteTemplate(w, name, data)
 }
 
 func main() {
-	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Debug = true
+    // Check if views directory is accessible
+    viewsDir, err := filepath.Abs("views")
+    if err != nil {
+        log.Fatalf("Error getting absolute path for views directory: %v", err)
+    }
+    if _, err := os.Stat(viewsDir); os.IsNotExist(err) {
+        log.Fatalf("Views directory not found at: %s", viewsDir)
+    } else {
+        log.Printf("Views directory found at: %s", viewsDir)
+    }
 
-	count := Count{ Count: 0 }
-	e.Renderer = newTemplate()
+    e := echo.New()
+    e.Use(middleware.Logger())
+    e.Use(middleware.Recover())
 
-	e.GET("/", func(c echo.Context) error {
-		return c.Render(200, "index", count)
-	})
+    e.Debug = true
 
-	e.POST("/count", func(c echo.Context) error {
-		count.Count++
-		return c.Render(200, "count", count)
-	})
+    e.Renderer = newTemplate()
 
-	e.Logger.Fatal(e.Start(":6969"))
+    // Initialize the controllers
+    homeController := controllers.NewHomeController()
+    countController := controllers.NewCountController()
+    componentController := controllers.NewComponentController()
+
+
+    // Register routes
+    web.RegisterRoutes(e, homeController, countController, componentController)
+
+    log.Println("Starting server on :6969")
+    e.Logger.Fatal(e.Start(":6969"))
 }
