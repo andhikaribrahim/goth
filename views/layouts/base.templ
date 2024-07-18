@@ -1,0 +1,33 @@
+package layouts
+
+import "goth/views/partials"
+
+templ Base(title string, isError bool) {
+  <!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<meta
+ 				name="description"
+ 				content="Go/Echo+Templ+Htmx: Full stack application using Golang's Echo framework & Templ templating language with user session management + CRUD to a SQLite database (To Do List) and HTMX in the frontend"
+			/>
+			<meta name="google" content="notranslate"/>
+			/* Scripts */
+			<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.1" integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/" crossorigin="anonymous"></script>
+			<title>Todo List { title }</title>
+			<link rel="stylesheet" href="/static/styles.css">
+		</head>
+		<body class="bg-gray-800" hx-boost="true">
+			<header>
+				if !isError {
+					@partials.Navbar()
+				}
+			</header>
+			<main class="container mx-auto">
+				{ children... }
+			</main>
+		</body>
+	</html>
+}
