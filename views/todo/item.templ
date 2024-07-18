@@ -1,0 +1,51 @@
+package todo
+
+import (
+  "strconv"
+  "goth/internals/entities"
+)
+
+func itemId(order int) string {
+  return "item-" + strconv.FormatInt(int64(order), 10)
+}
+
+func indicatorId(order int) string {
+  return "indicator-" + strconv.FormatInt(int64(order), 10)
+}
+
+func paramEndpoint(order int) string {
+  return "/todo?Order=" + strconv.FormatInt(int64(order), 10)
+}
+
+templ TodoItem(todos []entities.Todo) {
+  for index, todo := range todos {
+    <div id={itemId(todo.Order)} class="flex items-center text-white text-2xl mb-4">
+      <p
+        class={"mr-auto", templ.KV("line-through", todo.Status == entities.Completed)}
+      >
+        {strconv.FormatInt(int64(index + 1), 10)}. {todo.Title}
+      </p>
+
+      <div class="flex items-center gap-x-4">
+        <img id={indicatorId(todo.Order)} class="htmx-indicator" src="/static/img/spinner.svg" alt="Loading..">
+        <button
+          class="flex-inline text-sm text-red-400"
+          hx-swap="innerHTML"
+          hx-target={"#todo-result"}
+          hx-delete={paramEndpoint(todo.Order)}
+          hx-indicator={"#" + indicatorId(todo.Order)}
+        >
+          <span>Delete</span>
+        </button>
+        <button
+          class="text-sm text-green-400"
+          hx-swap="innerHTML"
+          hx-target={"#todo-result"}
+          hx-put={paramEndpoint(todo.Order)}
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  }
+}

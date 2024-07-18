@@ -1,0 +1,37 @@
+package todo
+
+import (
+  "goth/views/layouts"
+  "goth/views/shared"
+  "goth/internals/entities"
+)
+
+css containerWidth() {
+  min-width: 400px;
+  max-width: 100%;
+}
+
+// var overrideInputClass = "rounded-none"
+
+templ Index(todos []entities.Todo) {
+  @layouts.Base("Todo App", false) {
+    <div class="flex-col items-center justify-center mt-12 max-w-xl mx-auto">
+      <form
+        class={"flex-col items-stretch", containerWidth()}
+        hx-post="/todo"
+        hx-target="#todo-result"
+        hx-swap="innerHTML"
+        hx-trigger="submit"
+      >
+        <h1 class="text-white text-3xl text-center mb-8">My todo list</h1>
+        @shared.TextInput("title", "What needs to be done?", nil)
+        // @shared.FlashMessageContainer()
+        // @shared.TextInput("todo", "What needs to be done?", &overrideInputClass)
+      </form>
+
+      <div class="flex-col justify-center items-stretch mt-8" id="todo-result">
+        @TodoItem(todos)
+      </div>
+    </div>
+  }
+}

@@ -67,6 +67,7 @@ func main() {
     }
 
     e := echo.New()
+    e.Static("/static", "static")
     e.Use(middleware.Logger())
     e.Use(middleware.Recover())
 
@@ -78,10 +79,11 @@ func main() {
     homeController := controllers.NewHomeController()
     countController := controllers.NewCountController()
     componentController := controllers.NewComponentController()
+    todoController := controllers.NewTodoController()
 
 
     // Register routes
-    web.RegisterRoutes(e, homeController, countController, componentController)
+    web.RegisterRoutes(e, homeController, countController, componentController, todoController)
 
     log.Println("Starting server on :6969")
     e.Logger.Fatal(e.Start(":6969"))

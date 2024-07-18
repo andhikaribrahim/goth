@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"log"
-	"net/http"
+	"goth/internals/utils"
+	"goth/views/components"
 
 	"github.com/labstack/echo/v4"
 )
@@ -13,7 +13,8 @@ func NewComponentController() *ComponentController {
 	return &ComponentController{}
 }
 
-func (ctl *ComponentController) Index(c echo.Context) error {
-	log.Println("TEst render")
-	return c.Render(http.StatusOK, "componentIndex", nil)
+func (cc *ComponentController) GetIndexView(c echo.Context) error {
+	indexView := components.Index()
+
+	return utils.RenderView(c, indexView)
 }

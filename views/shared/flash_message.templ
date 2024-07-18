@@ -1,0 +1,11 @@
+package shared
+
+templ FlashErrorMessage(message string) {
+  <div
+    class="bg-red-100 p-4 fixed left-1/2 -translate-x-1/2 top-12 text-red-500 text-center rounded-md mb-4 max-w-md"
+    hx-on:htmx:load="setTimeout(() => this.remove(), 2000)"
+  >
+    {message}
+  </div>
+}
+
